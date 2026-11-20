@@ -1,0 +1,230 @@
+-- Router0: --
+Router#show running-config | section router ospf
+router ospf 1
+ log-adjacency-changes
+ redistribute connected subnets 
+ network 60.0.0.0 0.255.255.255 area 0
+ network 50.0.0.0 0.255.255.255 area 0
+ network 192.168.4.0 0.0.0.255 area 0
+ network 192.168.5.0 0.0.0.255 area 0
+ network 192.168.6.0 0.0.0.255 area 0
+Router#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     192.168.7.1     YES manual up                    up 
+GigabitEthernet0/0.2   192.168.4.1     YES manual up                    up 
+GigabitEthernet0/0.3   192.168.5.1     YES manual up                    up 
+GigabitEthernet0/0.4   192.168.6.1     YES manual up                    up 
+GigabitEthernet0/1     60.0.0.2        YES manual up                    up 
+GigabitEthernet0/2     50.0.0.2        YES manual up                    up 
+Vlan1                  unassigned      YES unset  administratively down down
+Router#show ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O    10.0.0.0/8 [110/3] via 60.0.0.1, 00:08:47, GigabitEthernet0/1
+                [110/3] via 50.0.0.1, 00:08:47, GigabitEthernet0/2
+O    30.0.0.0/8 [110/2] via 50.0.0.1, 00:08:47, GigabitEthernet0/2
+O    40.0.0.0/8 [110/2] via 60.0.0.1, 00:08:57, GigabitEthernet0/1
+     50.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       50.0.0.0/8 is directly connected, GigabitEthernet0/2
+L       50.0.0.2/32 is directly connected, GigabitEthernet0/2
+     60.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       60.0.0.0/8 is directly connected, GigabitEthernet0/1
+L       60.0.0.2/32 is directly connected, GigabitEthernet0/1
+O    192.168.1.0/24 [110/4] via 60.0.0.1, 00:08:47, GigabitEthernet0/1
+                    [110/4] via 50.0.0.1, 00:08:47, GigabitEthernet0/2
+-- Router1: --
+Router#show running-config | section router ospf
+router ospf 1
+ log-adjacency-changes
+ network 40.0.0.0 0.255.255.255 area 0
+ network 60.0.0.0 0.255.255.255 area 0
+Router#show ip interface brief 
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     192.168.3.1     YES manual up                    up 
+GigabitEthernet0/1     60.0.0.1        YES manual up                    up 
+GigabitEthernet0/2     40.0.0.2        YES manual up                    up 
+Vlan1                  unassigned      YES unset  administratively down down
+-- Router3: --
+Router#show running-config | section router ospf 
+router ospf 1
+ log-adjacency-changes
+ network 30.0.0.0 0.255.255.255 area 0
+ network 50.0.0.0 0.255.255.255 area 0
+ network 192.168.2.0 0.0.0.255 area 0
+Router#show ip interface brief 
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     192.168.2.1     YES manual up                    up 
+GigabitEthernet0/1     30.0.0.2        YES manual up                    up 
+GigabitEthernet0/2     50.0.0.1        YES manual up                    up 
+Vlan1                  unassigned      YES unset  administratively down down
+Router#
+Router#show ip route 
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O    10.0.0.0/8 [110/2] via 30.0.0.1, 00:19:25, GigabitEthernet0/1
+     30.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       30.0.0.0/8 is directly connected, GigabitEthernet0/1
+L       30.0.0.2/32 is directly connected, GigabitEthernet0/1
+O    40.0.0.0/8 [110/2] via 30.0.0.1, 00:19:25, GigabitEthernet0/1
+     50.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       50.0.0.0/8 is directly connected, GigabitEthernet0/2
+L       50.0.0.1/32 is directly connected, GigabitEthernet0/2
+O    60.0.0.0/8 [110/2] via 50.0.0.2, 00:19:25, GigabitEthernet0/2
+O    192.168.1.0/24 [110/3] via 30.0.0.1, 00:19:25, GigabitEthernet0/1
+     192.168.2.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.2.0/24 is directly connected, GigabitEthernet0/0
+-- Router4: --
+Router#show running-config | section router ospf
+router ospf 1
+ log-adjacency-changes
+ network 40.0.0.0 0.255.255.255 area 0
+ network 30.0.0.0 0.255.255.255 area 0
+ network 10.0.0.0 0.255.255.255 area 0
+Router#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     10.0.0.2        YES manual up                    up 
+GigabitEthernet0/1     30.0.0.1        YES manual up                    up 
+GigabitEthernet0/2     40.0.0.1        YES manual up                    up 
+Vlan1                  unassigned      YES unset  administratively down down
+Router#show ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       10.0.0.0/8 is directly connected, GigabitEthernet0/0
+L       10.0.0.2/32 is directly connected, GigabitEthernet0/0
+     30.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       30.0.0.0/8 is directly connected, GigabitEthernet0/1
+L       30.0.0.1/32 is directly connected, GigabitEthernet0/1
+     40.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       40.0.0.0/8 is directly connected, GigabitEthernet0/2
+L       40.0.0.1/32 is directly connected, GigabitEthernet0/2
+O    50.0.0.0/8 [110/2] via 30.0.0.2, 00:21:25, GigabitEthernet0/1
+O    60.0.0.0/8 [110/2] via 40.0.0.2, 00:21:25, GigabitEthernet0/2
+O    192.168.1.0/24 [110/2] via 10.0.0.1, 00:21:25, GigabitEthernet0/0
+-- Router5: --
+Router#show running-config | section router ospf
+router ospf 1
+ log-adjacency-changes
+ network 10.0.0.0 0.255.255.255 area 0
+ network 192.168.1.0 0.0.0.255 area 0
+Router#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     10.0.0.1        YES manual up                    up 
+GigabitEthernet0/1     192.168.1.1     YES manual up                    up 
+GigabitEthernet0/2     20.0.0.1        YES manual down                  down 
+Vlan1                  unassigned      YES unset  administratively down down
+Router#show ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       10.0.0.0/8 is directly connected, GigabitEthernet0/0
+L       10.0.0.1/32 is directly connected, GigabitEthernet0/0
+O    30.0.0.0/8 [110/2] via 10.0.0.2, 00:23:09, GigabitEthernet0/0
+O    40.0.0.0/8 [110/2] via 10.0.0.2, 00:23:19, GigabitEthernet0/0
+O    50.0.0.0/8 [110/3] via 10.0.0.2, 00:23:09, GigabitEthernet0/0
+O    60.0.0.0/8 [110/3] via 10.0.0.2, 00:23:19, GigabitEthernet0/0
+     192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.1.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.1.1/32 is directly connected, GigabitEthernet0/1
+O    192.168.2.0/24 [110/3] via 10.0.0.2, 00:23:09, GigabitEthernet0/0
+O    192.168.4.0/24 [110/4] via 10.0.0.2, 00:23:19, GigabitEthernet0/0
+-- Switch0: --
+Switch#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+FastEthernet0/1        unassigned      YES manual up                    up 
+FastEthernet0/2        unassigned      YES manual up                    up 
+FastEthernet0/3        unassigned      YES manual up                    up 
+FastEthernet0/4        unassigned      YES manual up                    up 
+FastEthernet0/5        unassigned      YES manual down                  down 
+FastEthernet0/6        unassigned      YES manual down                  down 
+FastEthernet0/7        unassigned      YES manual down                  down 
+FastEthernet0/8        unassigned      YES manual down                  down 
+FastEthernet0/9        unassigned      YES manual down                  down 
+FastEthernet0/10       unassigned      YES manual down                  down 
+FastEthernet0/11       unassigned      YES manual down                  down 
+FastEthernet0/12       unassigned      YES manual down                  down 
+FastEthernet0/13       unassigned      YES manual down                  down 
+FastEthernet0/14       unassigned      YES manual down                  down 
+FastEthernet0/15       unassigned      YES manual down                  down 
+FastEthernet0/16       unassigned      YES manual down                  down 
+FastEthernet0/17       unassigned      YES manual down                  down 
+FastEthernet0/18       unassigned      YES manual down                  down 
+FastEthernet0/19       unassigned      YES manual down                  down 
+FastEthernet0/20       unassigned      YES manual down                  down 
+FastEthernet0/21       unassigned      YES manual down                  down 
+-- Switch1: --
+Switch#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+FastEthernet0/1        unassigned      YES manual up                    up 
+FastEthernet0/2        unassigned      YES manual up                    up 
+FastEthernet0/3        unassigned      YES manual up                    up 
+FastEthernet0/4        unassigned      YES manual up                    up 
+FastEthernet0/5        unassigned      YES manual up                    up 
+FastEthernet0/6        unassigned      YES manual up                    up 
+FastEthernet0/7        unassigned      YES manual up                    up 
+FastEthernet0/8        unassigned      YES manual down                  down 
+FastEthernet0/9        unassigned      YES manual down                  down 
+FastEthernet0/10       unassigned      YES manual down                  down 
+FastEthernet0/11       unassigned      YES manual down                  down 
+FastEthernet0/12       unassigned      YES manual down                  down 
+FastEthernet0/13       unassigned      YES manual down                  down 
+FastEthernet0/14       unassigned      YES manual down                  down 
+FastEthernet0/15       unassigned      YES manual down                  down 
+FastEthernet0/16       unassigned      YES manual down                  down 
+FastEthernet0/17       unassigned      YES manual down                  down 
+FastEthernet0/18       unassigned      YES manual down                  down 
+FastEthernet0/19       unassigned      YES manual down                  down 
+FastEthernet0/20       unassigned      YES manual down                  down 
+FastEthernet0/21       unassigned      YES manual down                  down 
+-- Server0: --
+ip : 192.168.1.4
+subnet mask: 255.255.255.0
+default gateway: 192.168.1.1
+Dns server: 192.168.1.2
+-- Server1: --
+ip : 192.168.1.10
+subnet mask: 255.255.255.0
+default gateway: 192.168.1.1
+Dns server: 192.168.1.2
+-- Server2: --
+ip : 192.168.1.2
+subnet mask: 255.255.255.0
+default gateway: 192.168.1.1
+Dns server: 0.0.0.0
+-- Server3: --
+ip : 192.168.1.3
+subnet mask: 255.255.255.0
+default gateway: 192.168.1.1
+Dns server: 192.168.1.2
